@@ -23,7 +23,8 @@ export default class TaskRepository {
       | Prisma.XOR<Prisma.TaskCreateInput, Prisma.TaskUncheckedCreateInput>
       | Prisma.XOR<Prisma.TaskUpdateInput, Prisma.TaskUncheckedUpdateInput>,
   ): Promise<Task> {
-    if (!data.id) {
+    console.log('Received data:', data);
+    if (data.id === undefined) {
       return this.prisma.task.create({
         data: data as Prisma.TaskCreateInput,
       });
