@@ -15,28 +15,23 @@ const TodoPage = () => {
   const api = useFetch();
   const [ tasks, setTasks ] = useState<Task[]>([]);
   const [ newTaskName, setNewTaskName ] = useState('');
-  const [ editedNames, setEditedNames ] = useState<{ [key: number]: string,}>({}); // Un objet pour gérer l'édition des tâches
-  // Charger toutes les tâches
-  console.log('tasks', tasks);
+  const [ editedNames, setEditedNames ] = useState<{ [key: number]: string,}>({});
+
   const handleFetchTasks = async () => {
     try {
       const response = await api.get('/tasks');
       if (Array.isArray(response)) {
         setTasks(response);
-        console.log(response);
       }
     } catch (error) {
       console.error(error);
     }
   };
-
-  // Supprimer une tâche
   const handleDelete = async (id: number) => {
     await api.delete(`/tasks/${id}`);
     handleFetchTasks();
   };
 
-  // Ajouter une nouvelle tâche
   const handleSave = async () => {
     if (!newTaskName.trim()) return;
     await api.post('/tasks', { name: newTaskName });
@@ -44,20 +39,17 @@ const TodoPage = () => {
     handleFetchTasks();
   };
 
-  // Mettre à jour une tâche
   const handleUpdate = async (id: number, updatedName: string, oldName: string) => {
-    if (!updatedName.trim() || updatedName === oldName) return; // Ne pas envoyer si pas de modification
+    if (!updatedName.trim() || updatedName === oldName) return;
 
     const updatedTask = {
       id,
       name: updatedName,
     };
 
-    console.log('updatedTask', updatedTask);
     await api.patch(`/tasks/${id}`, updatedTask);
     handleFetchTasks();
   };
-  // Gérer la modification du nom d'une tâche spécifique
   const handleChange = (id: number, value: string) => {
     setEditedNames((prev) => ({ ...prev, [id]: value }));
   };

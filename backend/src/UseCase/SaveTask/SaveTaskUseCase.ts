@@ -13,10 +13,8 @@ export default class SaveTaskUseCase
     if (!dto.name || dto.name.trim() === '') {
       throw new Error('Task name is required');
     }
-    console.log('Updating task with ID:', dto);
     try {
       if (dto.id !== null) {
-        console.log('true');
         return this.taskRepository.save({
           id: dto.id,
           name: dto.name,
